@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adminstrator Adgang - Alpha Solutions</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/favicon-32x32.png}"/>
+</head>
+<body>
+<h1>Vil du gerne anmode om adminstratorlogin?</h1>
+<p>Indtast dit login forneden, samt dit medarbejder ID derefter vil systemadminstratoren godkende din anmodning.</p>
+
+<form action="/anmodadmin" method="POST">
+    <fieldset>
+        <label for="brugernavn">Brugernavn:</label>
+        <input type="text" id="brugernavn" name="brugernavn">
+
+        <label for="kodeord">Kodeord:</label>
+        <input type="text" id="kodeord" name="kodeord">
+
+        <label for="medarbejderid">Medarbejder ID:</label>
+        <input type="text" id="medarbejderid" name="medarbejderid">
+
+    </fieldset>
+
+    <button type="submit">Anmod</button>
+
+</form>
+
+
+</body>
+
+
+</html>

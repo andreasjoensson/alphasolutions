@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorator="layout/root_layout" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Alpha Solutions - Add Task</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/favicon-32x32.png}"/>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/}">
+        <img id="LOGO" th:src="@{/images/alphaSolutions.png}" alt="Alpha Solutions">
+    </a>
+    <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+    <div id="user-login">
+        <div class="nav-item dropdown show">
+            <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action" aria-expanded="true"><i class="fas fa-user"></i> <b class="caret"></b></a>
+            <div class="dropdown-menu">
+                <a sec:authorize="isAuthenticated()"><a th:href="@{/logout}" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign out</a></a>
+            </div>
+        </div>
+    </div>
+    </ul>
+</nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Home</div>
+                    <a class="nav-link" th:href="@{/}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                        Home
+                    </a>
+
+
+                    <div class="sb-sidenav-menu-heading">Company</div>
+
+                    <a class="nav-link" th:href="@{/employees}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Employees list
+                    </a>
+
+
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" th:href="@{/createEmployee}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                            Create Employee
+                        </a>
+                    </div>
+
+
+                    <div class="sb-sidenav-menu-heading">Project Management</div>
+
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" th:href="@{/createProject}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-plus-circle"></i></div>
+                            Create Project
+                        </a>
+                    </div>
+
+                    <a class="nav-link" th:href="@{/projects}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-list-ul"></i> </div>
+                        Current Projects
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Signed in as:</div>
+                <h5 sec:authentication="principal.username"></h5>
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4">Add Task</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/addtask}">Task</a>
+                    </li>
+                    <li class="breadcrumb-item active">Add Task</li>
+                </ol>
+                <div class="card mb-4">
+                    <main>
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-7">
+                                    <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                        <div class="card-header">
+                                            <h3 class="text-center font-weight-light my-4">Add Task</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <form th:action="@{/addtask}" method="POST">
+                                                <p>Use the form bellow to add a new task</p>
+                                                <hr>
+                                                <!-- Project name-->
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="navn">Task name</label> <input class="form-control py-4" id="navn" name="navn" type="text" aria-describedby="name" placeholder="Enter task name">
+                                                </div>
+                                                <!-- Project selector-->
+                                                <label>Which project belongs to this task ?</label>
+                                                <select name="projektId">
+                                                    <option th:each="project: ${projects}"
+                                                            th:value="${project.ProjectId}"
+                                                            th:text="${project.name}"/>
+                                                </select>
+                                                <!-- Deadline-->
+                                                <div class="form-row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="small mb-1" for="deadline">Deadline</label> <input class="form-control py-4" id="deadline" name="deadline" type="date" placeholder="Enter deadline">
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Task Description-->
+                                                    <div class="form-row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="small mb-1" for="taskDescription">Task Description</label> <input class="form-control py-4" id="taskDescription" name="taskDescription" type="text" placeholder="Enter task description">
+                                                            </div>
+                                                        </div>
+                                                        <!-- Add employee to task-->
+                                                        <label>Add employee</label>
+                                                        <input type="checkbox" name="employees"
+                                                               th:each="medarbejder : ${medarbejderList}"
+                                                               th:text="${medarbejder.name}"
+                                                               th:value="${medarbejder.EmployeeId}"
+                                                        />
+                                                    </div>
+                                                    <div class="small">
+                                                        <a th:href="@{/projects}" class="btn btn-primary">Go back</a>
+                                                        <button class="btn btn-primary" type="submit">Add task</button>
+                                                    </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">
+                            Copyright © Alpha Solutions 2021
+                        </div>
+                    </div>
+                </div>
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+                <script th:src="@{js/scripts.js}"></script>
+            </footer>
+        </main>
+    </div>
+</div>
+</body>
+</html>
